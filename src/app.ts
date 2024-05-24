@@ -5,6 +5,7 @@ const app: Application = express();
 //parsers
 app.use(express.json());
 app.use(cors());
+
 app.get("/", (req: Request, res: Response) => {
   res.send("university server is running on the highway!");
 });
