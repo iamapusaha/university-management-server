@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import validator from "validator";
 import {
   Guardian,
   LocalGuardian,
@@ -13,13 +14,13 @@ const userNameSchema = new Schema<UserName>({
     required: [true, "First Name is required"],
     maxlength: [10, "first name can't more than 10 characters"],
     trim: true,
-    validate: {
-      validator: function (value: string) {
-        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
-        return firstNameStr === value;
-      },
-      message: "{VALUE} is not in a capitalize format!",
-    },
+    // validate: {
+    //   validator: function (value: string) {
+    //     const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
+    //     return firstNameStr === value;
+    //   },
+    //   message: "{VALUE} is not in a capitalize format!",
+    // },
   },
   middleName: { type: String, trim: true },
   lastName: {
@@ -27,6 +28,10 @@ const userNameSchema = new Schema<UserName>({
     required: [true, "Last Name is required"],
     maxlength: [10, "last name can't more than 10 characters"],
     trim: true,
+    // validate: {
+    //   validator: (value: string) => validator.isAlpha(value),
+    //   message: "{VALUE} is not a valid lastName",
+    // },
   },
 });
 
@@ -98,6 +103,10 @@ const studentSchema = new Schema<Student>({
     required: [true, "Email is required"],
     unique: true,
     trim: true,
+    // validate: {
+    //   validator: (value: string) => validator.isEmail(value),
+    //   message: "{VALUE} is valid email!",
+    // },
   },
   contactNo: {
     type: String,
