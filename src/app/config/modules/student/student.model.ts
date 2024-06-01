@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import validator from "validator";
+import bcrypt from "bcrypt";
 import {
   StudentModel,
   TGuardian,
@@ -7,6 +7,7 @@ import {
   TStudent,
   TUserName,
 } from "./student.interface";
+import config from "../..";
 
 // Define UserName Schema
 const userNameSchema = new Schema<TUserName>({
@@ -74,6 +75,11 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 // Define Student Schema
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: [true, "ID is required"], unique: true },
+  password: {
+    type: String,
+    required: [true, "ID is required"],
+    maxlength: [20, "password can't more than 20 characters"],
+  },
   name: { type: userNameSchema, required: [true, "Name is required"] },
   gender: {
     type: String,
@@ -146,6 +152,21 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
+//pre save middleware/hook : will work on create() save()
+studentSchema.pre("save", async function (next) {
+  const user = this;
+  // console.log(this, "pre hook : we will save data");
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
+
+//post save middleware /hook
+studentSchema.post("save", function () {
+  console.log(this, "post hook: we will save data");
+});
 //creating a custom instance method
 
 // studentSchema.methods.isUserExists = async function (id: string) {
