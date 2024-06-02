@@ -8,6 +8,7 @@ import {
   TUserName,
 } from "./student.interface";
 import config from "../..";
+import { boolean } from "zod";
 
 // Define UserName Schema
 const userNameSchema = new Schema<TUserName>({
@@ -145,6 +146,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     default: "active",
     trim: true,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 // creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
@@ -155,7 +160,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
 //pre save middleware/hook : will work on create() save()
 studentSchema.pre("save", async function (next) {
   const user = this;
-  // console.log(this, "pre hook : we will save data");
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds)
@@ -164,8 +168,22 @@ studentSchema.pre("save", async function (next) {
 });
 
 //post save middleware /hook
-studentSchema.post("save", function () {
-  console.log(this, "post hook: we will save data");
+studentSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next();
+});
+
+studentSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
 });
 //creating a custom instance method
 

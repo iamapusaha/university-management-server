@@ -35,6 +35,7 @@ export type TStudent = {
   localGuardian: TLocalGuardian;
   profileImg?: string;
   isActive: "active" | "blocked";
+  isDeleted: boolean;
 };
 // for creating static instance
 export interface StudentModel extends Model<TStudent> {
