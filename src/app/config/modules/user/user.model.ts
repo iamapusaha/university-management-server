@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { TUser } from "./user.interface";
 
 const UserScheme = new Schema<TUser>(
   {
@@ -21,7 +22,7 @@ const UserScheme = new Schema<TUser>(
     status: {
       type: String,
       enum: ["in-progress", "blocked"],
-      default: "is-progress",
+      default: "in-progress",
     },
     isDeleted: {
       type: Boolean,
@@ -33,4 +34,4 @@ const UserScheme = new Schema<TUser>(
   }
 );
 
-export const user = model<TUser>("user", UserScheme);
+export const User = model<TUser>("user", UserScheme);

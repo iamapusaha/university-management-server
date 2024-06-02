@@ -2,24 +2,24 @@ import { Request, Response } from "express";
 import { studentServices } from "./student.service";
 import studentValidationSchema from "./student.validation";
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { student: studentData } = req.body;
-    const jodParsedData = studentValidationSchema.parse(studentData);
-    const result = await studentServices.createStudentIntoDB(jodParsedData);
-    res.status(200).json({
-      success: true,
-      message: "student is create successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "something went wrong",
-      error: err,
-    });
-  }
-};
+// const createStudent = async (req: Request, res: Response) => {
+//   try {
+//     const { student: studentData } = req.body;
+//     const jodParsedData = studentValidationSchema.parse(studentData);
+//     const result = await studentServices.createStudentIntoDB(jodParsedData);
+//     res.status(200).json({
+//       success: true,
+//       message: "student is create successfully",
+//       data: result,
+//     });
+//   } catch (err: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: err.message || "something went wrong",
+//       error: err,
+//     });
+//   }
+// };
 const getStudentData = async (req: Request, res: Response) => {
   try {
     const result = await studentServices.getAllStudentFromDB();
@@ -73,7 +73,6 @@ const deleteSingleStudentData = async (req: Request, res: Response) => {
 };
 
 export const studentController = {
-  createStudent,
   getStudentData,
   getSingleStudentData,
   deleteSingleStudentData,
