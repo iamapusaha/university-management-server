@@ -8,7 +8,7 @@ import {
   TUserName,
 } from "./student.interface";
 import config from "../..";
-import { boolean } from "zod";
+import { boolean, string } from "zod";
 
 // Define UserName Schema
 const userNameSchema = new Schema<TUserName>({
@@ -74,83 +74,98 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 // Define Student Schema
-const studentSchema = new Schema<TStudent, StudentModel>({
-  id: { type: String, required: [true, "ID is required"], unique: true },
-  password: {
-    type: String,
-    required: [true, "ID is required"],
-    maxlength: [20, "password can't more than 20 characters"],
-  },
-  name: { type: userNameSchema, required: [true, "Name is required"] },
-  gender: {
-    type: String,
-    enum: {
-      values: ["male", "female", "other"],
-      message: "{VALUE} is not a valid gender",
+const studentSchema = new Schema<TStudent, StudentModel>(
+  {
+    id: { type: String, required: [true, "ID is required"], unique: true },
+    password: {
+      type: String,
+      required: [true, "ID is required"],
+      maxlength: [20, "password can't more than 20 characters"],
     },
-    required: [true, "Gender is required"],
-  },
-  dateOfBirth: {
-    type: String,
-    required: [true, "Date of Birth is required"],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-    trim: true,
-  },
-  contactNo: {
-    type: String,
-    required: [true, "Contact No is required"],
-    trim: true,
-  },
-  emergencyContactNo: {
-    type: String,
-    required: [true, "Emergency Contact No is required"],
-    trim: true,
-  },
-  bloodGroup: {
-    type: String,
-    enum: {
-      values: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-      message: "{VALUE} is not a valid blood group!",
+    name: { type: userNameSchema, required: [true, "Name is required"] },
+    gender: {
+      type: String,
+      enum: {
+        values: ["male", "female", "other"],
+        message: "{VALUE} is not a valid gender",
+      },
+      required: [true, "Gender is required"],
     },
-    required: [true, "Blood Group is required"],
-  },
-  presentAddress: {
-    type: String,
-    required: [true, "Present Address is required"],
-    trim: true,
-  },
-  permanentAddress: {
-    type: String,
-    required: [true, "Permanent Address is required"],
-    trim: true,
-  },
-  guardian: { type: guardianSchema, required: [true, "Guardian is required"] },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: [true, "Local Guardian is required"],
-    trim: true,
-  },
-  profileImg: { type: String, trim: true },
-  isActive: {
-    type: String,
-    enum: {
-      values: ["active", "blocked"],
-      message: "{VALUE} is not a valid data status!",
+    dateOfBirth: {
+      type: String,
+      required: [true, "Date of Birth is required"],
+      trim: true,
     },
-    required: [true, "Status is required"],
-    default: "active",
-    trim: true,
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+    },
+    contactNo: {
+      type: String,
+      required: [true, "Contact No is required"],
+      trim: true,
+    },
+    emergencyContactNo: {
+      type: String,
+      required: [true, "Emergency Contact No is required"],
+      trim: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+        message: "{VALUE} is not a valid blood group!",
+      },
+      required: [true, "Blood Group is required"],
+    },
+    presentAddress: {
+      type: String,
+      required: [true, "Present Address is required"],
+      trim: true,
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, "Permanent Address is required"],
+      trim: true,
+    },
+    guardian: {
+      type: guardianSchema,
+      required: [true, "Guardian is required"],
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: [true, "Local Guardian is required"],
+      trim: true,
+    },
+    profileImg: { type: String, trim: true },
+    isActive: {
+      type: String,
+      enum: {
+        values: ["active", "blocked"],
+        message: "{VALUE} is not a valid data status!",
+      },
+      required: [true, "Status is required"],
+      default: "active",
+      trim: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+  }
+);
+
+studentSchema.virtual("fullName").get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
+
 // creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
