@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { studentServices } from "./student.service";
 import studentValidationSchema from "./student.validation";
+import sendResponse from "../../../utils/sendResponse";
+import httpStatus from "http-status";
 
 const getStudentData = async (
   req: Request,
@@ -27,9 +29,10 @@ const getSingleStudentData = async (
   try {
     const { studentId } = req.params;
     const result = await studentServices.getSingleStudentFromDB(studentId);
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
-      message: "student data is fetched successfully!",
+      message: "student create succesfully",
       data: result,
     });
   } catch (err) {
