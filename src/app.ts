@@ -1,17 +1,15 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import { studentRouters } from "./app/config/modules/student/student.route";
-import { userRouters } from "./app/config/modules/user/user.route";
 import globalErrorHandlar from "./app/middlewares/globalErrorHandlar";
 import notFound from "./app/middlewares/notFound";
+import router from "./app/router";
 const app: Application = express();
 
 //parsers
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/v1/students", studentRouters);
-app.use("/api/v1/users", userRouters);
+app.use("/api/v1/", router);
 
 //not found route
 app.use(notFound);
