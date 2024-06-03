@@ -11,7 +11,8 @@ const getStudentData = async (
 ) => {
   try {
     const result = await studentServices.getAllStudentFromDB();
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student data are fetched successfully!",
       data: result,
@@ -47,7 +48,8 @@ const deleteSingleStudentData = async (
   try {
     const { studentId } = req.params;
     const result = await studentServices.deleteStudentFromDB(studentId);
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student data is delete successfully!",
       data: result,

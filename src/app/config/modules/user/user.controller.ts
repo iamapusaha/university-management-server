@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { userServices } from "./user.service";
+import sendResponse from "../../../utils/sendResponse";
+import httpStatus from "http-status";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -8,8 +10,8 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       password,
       studentData
     );
-    // const result = await
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student is create successfully",
       data: result,
