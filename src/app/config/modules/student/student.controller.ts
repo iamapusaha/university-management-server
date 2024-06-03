@@ -1,14 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { studentServices } from "./student.service";
 import studentValidationSchema from "./student.validation";
 import sendResponse from "../../../utils/sendResponse";
 import httpStatus from "http-status";
 
-const getStudentData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getStudentData: RequestHandler = async (req, res, next) => {
   try {
     const result = await studentServices.getAllStudentFromDB();
 
@@ -23,11 +19,7 @@ const getStudentData = async (
   }
 };
 
-const getSingleStudentData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getSingleStudentData: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const result = await studentServices.getSingleStudentFromDB(studentId);
@@ -42,11 +34,7 @@ const getSingleStudentData = async (
     next(err);
   }
 };
-const deleteSingleStudentData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteSingleStudentData: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const result = await studentServices.deleteStudentFromDB(studentId);
