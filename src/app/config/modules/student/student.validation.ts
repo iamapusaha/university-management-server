@@ -70,47 +70,50 @@ const localGuardianSchema = z.object({
 
 // Define Student Schema
 const studentValidationSchema = z.object({
-  id: z.string().min(1, { message: "ID is required" }).transform(trimString),
-  password: z
-    .string()
-    .max(20, { message: "Password can't be more than 20 characters" }),
-  name: userNameSchema,
-  gender: z.enum(["male", "female", "other"], {
-    message: "Gender is required",
+  body: z.object({
+    password: z
+      .string()
+      .max(20, { message: "Password can't be more than 20 characters" }),
+    student: z.object({
+      name: userNameSchema,
+      gender: z.enum(["male", "female", "other"], {
+        message: "Gender is required",
+      }),
+      dateOfBirth: z
+        .string()
+        .min(1, { message: "Date of Birth is required" })
+        .transform(trimString),
+      email: z
+        .string()
+        .email({ message: "Email is not valid" })
+        .min(1, { message: "Email is required" })
+        .transform(trimString),
+      contactNo: z
+        .string()
+        .min(1, { message: "Contact No is required" })
+        .transform(trimString),
+      emergencyContactNo: z
+        .string()
+        .min(1, { message: "Emergency Contact No is required" })
+        .transform(trimString),
+      bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
+        message: "Blood Group is required",
+      }),
+      presentAddress: z
+        .string()
+        .min(1, { message: "Present Address is required" })
+        .transform(trimString),
+      permanentAddress: z
+        .string()
+        .min(1, { message: "Permanent Address is required" })
+        .transform(trimString),
+      guardian: guardianSchema,
+      localGuardian: localGuardianSchema,
+      profileImg: z.string().optional(),
+    }),
   }),
-  dateOfBirth: z
-    .string()
-    .min(1, { message: "Date of Birth is required" })
-    .transform(trimString),
-  email: z
-    .string()
-    .email({ message: "Email is not valid" })
-    .min(1, { message: "Email is required" })
-    .transform(trimString),
-  contactNo: z
-    .string()
-    .min(1, { message: "Contact No is required" })
-    .transform(trimString),
-  emergencyContactNo: z
-    .string()
-    .min(1, { message: "Emergency Contact No is required" })
-    .transform(trimString),
-  bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
-    message: "Blood Group is required",
-  }),
-  presentAddress: z
-    .string()
-    .min(1, { message: "Present Address is required" })
-    .transform(trimString),
-  permanentAddress: z
-    .string()
-    .min(1, { message: "Permanent Address is required" })
-    .transform(trimString),
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  profileImg: z.string().optional(),
-  isActive: z.enum(["active", "blocked"]).default("active"),
-  isDeleted: z.boolean().optional().default(false),
 });
 
-export default studentValidationSchema;
+export const studentValidations = {
+  studentValidationSchema,
+};
