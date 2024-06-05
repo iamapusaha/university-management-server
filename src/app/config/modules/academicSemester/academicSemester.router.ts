@@ -10,5 +10,9 @@ router.post(
   validateRequest(academicValidate.createAcademicSemesterValidationSchema),
   academicSemesterController.createAcademicSemester
 );
+router.get(
+  "/get-all-data",
+  academicSemesterController.getAllAcademicSemesterData
+);
 
 export const semesterRouters = router;
