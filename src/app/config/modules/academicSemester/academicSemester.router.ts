@@ -14,5 +14,9 @@ router.get(
   "/get-all-data",
   academicSemesterController.getAllAcademicSemesterData
 );
+router.get(
+  "/get-single-data/:semesterId",
+  academicSemesterController.getSingleAcademicSemesterData
+);
 
 export const semesterRouters = router;
