@@ -1,0 +1,3 @@
+type TAcademicFaculity = {
+  name: string;
+};
