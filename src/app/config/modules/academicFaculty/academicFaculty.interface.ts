@@ -1,3 +1,3 @@
-type TAcademicFaculity = {
+type TAcademicFaculty = {
   name: string;
 };
