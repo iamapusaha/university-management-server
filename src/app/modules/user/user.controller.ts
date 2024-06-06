@@ -1,8 +1,9 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { userServices } from "./user.service";
-import sendResponse from "../../../utils/sendResponse";
+
 import httpStatus from "http-status";
-import catchAsync from "../../../utils/catchAsync";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 
 const createUser: RequestHandler = catchAsync(async (req, res, next) => {
   const { password, student: studentData } = req.body;
