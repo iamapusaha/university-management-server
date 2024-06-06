@@ -1,10 +1,12 @@
 import { RequestHandler } from "express";
-import catchAsync from "../../../utils/catchAsync";
+
 import { academicFacultyServices } from "./academicFaculty.service";
 import httpStatus from "http-status";
-import sendResponse from "../../../utils/sendResponse";
+
 import { AcademicFaculty } from "./academicFaculty.model";
 import { TAcademicFaculty } from "./academicFaculty.interface";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
 
 const createAcademicFaculty: RequestHandler = catchAsync(
   async (req, res, next) => {

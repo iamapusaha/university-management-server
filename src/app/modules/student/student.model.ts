@@ -7,7 +7,6 @@ import {
   TStudent,
   TUserName,
 } from "./student.interface";
-import config from "../..";
 import { boolean, string } from "zod";
 
 // Define UserName Schema
