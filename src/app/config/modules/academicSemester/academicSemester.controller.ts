@@ -18,17 +18,19 @@ const createAcademicSemester: RequestHandler = catchAsync(
   }
 );
 
-const getAllAcademicSemesterData: RequestHandler = async (req, res, next) => {
-  const result =
-    await AcademicSemesterServices.getAllAcademicSemesterDataFromDB();
+const getAllAcademicSemesterData: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const result =
+      await AcademicSemesterServices.getAllAcademicSemesterDataFromDB();
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Academic semester data fetched successfully",
-    data: result,
-  });
-};
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Academic semester data fetched successfully",
+      data: result,
+    });
+  }
+);
 const getSingleAcademicSemesterData: RequestHandler = catchAsync(
   async (req, res, next) => {
     const { semesterId } = req.params;
@@ -45,9 +47,25 @@ const getSingleAcademicSemesterData: RequestHandler = catchAsync(
     });
   }
 );
+const updateAcademicSemester: RequestHandler = catchAsync(
+  async (req, res, next) => {
+    const { semesterId } = req.params;
+    const result = await AcademicSemesterServices.updateAcademicSemesterById(
+      semesterId,
+      req.body
+    );
 
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Academic semester is retrived successfully",
+      data: result,
+    });
+  }
+);
 export const academicSemesterController = {
   createAcademicSemester,
   getAllAcademicSemesterData,
   getSingleAcademicSemesterData,
+  updateAcademicSemester,
 };

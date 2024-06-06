@@ -18,5 +18,10 @@ router.get(
   "/get-single-data/:semesterId",
   academicSemesterController.getSingleAcademicSemesterData
 );
+router.patch(
+  "/update-semester/:semesterId",
+  validateRequest(academicValidate.updateAcademicSemesterValidationSchema),
+  academicSemesterController.updateAcademicSemester
+);
 
 export const semesterRouters = router;
