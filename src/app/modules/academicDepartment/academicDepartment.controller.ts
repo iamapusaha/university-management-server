@@ -39,7 +39,7 @@ const getSingleAcademicDepartment: RequestHandler = async (req, res, next) => {
 };
 
 const updateAcademicDepartment: RequestHandler = async (req, res, next) => {
-  const { departmentId } = req.body;
+  const { departmentId } = req.params;
   const result = await academicDepartmentServices.updateAcademicDepartment(
     departmentId,
     req.body

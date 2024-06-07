@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { TAcademicDepartment } from "./academicDepartment.interface";
 import { AcademicDepartment } from "./academicDepartment.model";
 
@@ -11,17 +12,21 @@ const getAcademicDepartmentFromDB = async () => {
   return result;
 };
 const getSingleAcademicDepartmentFromDB = async (id: string) => {
-  const result = await AcademicDepartment.findOne({ _id: id });
+  const result = await AcademicDepartment.findById(id);
   return result;
 };
 const updateAcademicDepartmentFromDB = async (
   id: string,
-  payload: TAcademicDepartment
+  payload: Partial<TAcademicDepartment>
 ) => {
   const result = await AcademicDepartment.findByIdAndUpdate(
-    { _id: id },
+    {
+      _id: id,
+    },
     payload,
-    { new: true }
+    {
+      new: true,
+    }
   );
   return result;
 };
