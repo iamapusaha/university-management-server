@@ -49,6 +49,20 @@ AcademicSemesterSchema.pre("save", async function (next) {
   next();
 });
 
+AcademicSemesterSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate() as Partial<TAcademicSemester>;
+  if (update.year && update.name) {
+    const isSemesterExists = await AcademicSemester.findOne({
+      year: update.year,
+      name: update.name,
+    });
+    if (isSemesterExists) {
+      throw new Error("Semester already exists!");
+    }
+  }
+  next();
+});
+
 const AcademicSemester = model<TAcademicSemester>(
   "academicSemester",
   AcademicSemesterSchema
