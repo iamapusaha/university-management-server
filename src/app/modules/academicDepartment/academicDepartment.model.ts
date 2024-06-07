@@ -10,7 +10,7 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
     },
     academicFaculty: {
       type: Schema.Types.ObjectId,
-      ref: "AcademicFaculty",
+      ref: "academicFaculty", // insert database collection name here
     },
   },
   {
