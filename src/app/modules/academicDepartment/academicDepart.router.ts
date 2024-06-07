@@ -28,3 +28,5 @@ router.patch(
 );
 
 export const academicDepartmentRouters = router;
+
+//this file only for academic department router
