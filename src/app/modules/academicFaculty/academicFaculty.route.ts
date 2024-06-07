@@ -15,21 +15,15 @@ router.post(
   academicFacultyController.createAcademicFaculty
 );
 
-router.get(
-  "/get-all-academic-faculty",
-  academicSemesterController.getAllAcademicSemesterData
-);
+router.get("/", academicFacultyController.getAllAcademicFaculty);
 
-router.get(
-  "/get-single-academic-faculty/:facultyId",
-  academicSemesterController.getSingleAcademicSemesterData
-);
+router.get("/:facultyId", academicFacultyController.getSingleAcademicFaculty);
 router.patch(
-  "/update-academic-faculty/:facultyId",
+  "/:facultyId",
   validateRequest(
     academicFacultyValidation.updateAcademicFacultyValidationSchema
   ),
-  academicSemesterController.updateAcademicSemester
+  academicFacultyController.updateAcademicFaculty
 );
 
 export const academicFacultyRouters = router;
