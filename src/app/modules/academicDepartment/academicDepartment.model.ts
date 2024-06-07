@@ -28,6 +28,15 @@ academicDepartmentSchema.pre("save", async function (next) {
   next();
 });
 
+academicDepartmentSchema.pre("findOneAndUpdate", async function (next) {
+  const query = this.getQuery();
+  const isDepartmentExists = await AcademicDepartment.findOne(query);
+  if (!isDepartmentExists) {
+    throw new Error("this department doesn't exists!");
+  }
+  next();
+});
+
 export const AcademicDepartment = model<TAcademicDepartment>(
   "academicDepartment",
   academicDepartmentSchema
