@@ -3,6 +3,12 @@ import { TAcademicDepartment } from "./academicDepartment.interface";
 import { AcademicDepartment } from "./academicDepartment.model";
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
+  const isDepartmentExists = await AcademicDepartment.find({
+    name: payload.name,
+  });
+  if (isDepartmentExists) {
+    throw new Error("Department is alrady exists!");
+  }
   const result = await AcademicDepartment.create(payload);
   return result;
 };
