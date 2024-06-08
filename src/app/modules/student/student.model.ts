@@ -186,6 +186,7 @@ studentSchema.pre("findOneAndUpdate", async function (next) {
       httpStatus.NOT_FOUND,
       "Not found any Student bt the id!"
     );
+    next();
   }
 });
 studentSchema.pre("aggregate", function (next) {
