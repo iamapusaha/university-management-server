@@ -113,6 +113,84 @@ const createStudentValidationSchema = z.object({
   }),
 });
 
+// Define UserName Schema
+const updateUserNameSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, { message: "First Name is required" })
+    .max(20, { message: "First Name can't be more than 20 characters" })
+    .refine((value) => /^[A-Z]/.test(value), {
+      message: "First Name must start with a capital letter",
+    })
+    .transform(trimString)
+    .optional(),
+  middleName: z.string().optional(),
+  lastName: z
+    .string()
+    .min(1, { message: "Last Name is required" })
+    .transform(trimString)
+    .optional(),
+});
+
+// Define Guardian Schema
+const updateGuardianSchema = z.object({
+  fatherName: z
+    .string()
+    .min(1, { message: "Father Name is required" })
+    .transform(trimString)
+    .optional(),
+  fatherOccupation: z
+    .string()
+    .min(1, { message: "Father Occupation is required" })
+    .transform(trimString)
+    .optional(),
+  fatherContactNo: z
+    .string()
+    .min(1, { message: "Father Contact No is required" })
+    .transform(trimString)
+    .optional(),
+  motherName: z
+    .string()
+    .min(1, { message: "Mother Name is required" })
+    .transform(trimString)
+    .optional(),
+  motherOccupation: z
+    .string()
+    .min(1, { message: "Mother Occupation is required" })
+    .transform(trimString)
+    .optional(),
+  motherContactNo: z
+    .string()
+    .min(1, { message: "Mother Contact No is required" })
+    .transform(trimString)
+    .optional(),
+});
+
+// Define LocalGuardian Schema
+const updateLocalGuardianSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Local Guardian Name is required" })
+    .transform(trimString)
+    .optional(),
+  occupation: z
+    .string()
+    .min(1, { message: "Local Guardian Occupation is required" })
+    .transform(trimString)
+    .optional(),
+  contactNo: z
+    .string()
+    .min(1, { message: "Local Guardian Contact No is required" })
+    .transform(trimString)
+    .optional(),
+  address: z
+    .string()
+    .min(1, { message: "Local Guardian Address is required" })
+    .transform(trimString)
+    .optional(),
+});
+
+// Define Update Student Validation Schema
 const updateStudentValidationSchema = z.object({
   body: z.object({
     password: z
@@ -121,7 +199,7 @@ const updateStudentValidationSchema = z.object({
       .optional(),
     student: z
       .object({
-        name: userNameSchema.optional(),
+        name: updateUserNameSchema.optional(),
         gender: z
           .enum(["male", "female", "other"], {
             message: "Gender is required",
@@ -159,8 +237,8 @@ const updateStudentValidationSchema = z.object({
           .min(1, { message: "Permanent Address is required" })
           .transform(trimString)
           .optional(),
-        guardian: guardianSchema.optional(),
-        localGuardian: localGuardianSchema.optional(),
+        guardian: updateGuardianSchema.optional(),
+        localGuardian: updateLocalGuardianSchema.optional(),
         profileImg: z.string().optional(),
         academicDepartment: z.string().optional(),
         admissionSemester: z.string().optional(),
