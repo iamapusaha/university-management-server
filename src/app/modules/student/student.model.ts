@@ -8,6 +8,8 @@ import {
   TUserName,
 } from "./student.interface";
 import { boolean, string } from "zod";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 // Define UserName Schema
 const userNameSchema = new Schema<TUserName>({
@@ -175,6 +177,16 @@ studentSchema.pre("find", function (next) {
 studentSchema.pre("findOne", function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
+});
+studentSchema.pre("findOneAndUpdate", async function (next) {
+  const query = this.getQuery();
+  const isExistingStudent = await Student.findOne(query);
+  if (!isExistingStudent) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Not found any Student bt the id!"
+    );
+  }
 });
 studentSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
