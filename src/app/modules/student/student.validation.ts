@@ -113,6 +113,63 @@ const createStudentValidationSchema = z.object({
   }),
 });
 
+const updateStudentValidationSchema = z.object({
+  body: z.object({
+    password: z
+      .string()
+      .max(20, { message: "Password can't be more than 20 characters" })
+      .optional(),
+    student: z
+      .object({
+        name: userNameSchema.optional(),
+        gender: z
+          .enum(["male", "female", "other"], {
+            message: "Gender is required",
+          })
+          .optional(),
+        dateOfBirth: z.date().optional(),
+        email: z
+          .string()
+          .email({ message: "Email is not valid" })
+          .min(1, { message: "Email is required" })
+          .transform(trimString)
+          .optional(),
+        contactNo: z
+          .string()
+          .min(1, { message: "Contact No is required" })
+          .transform(trimString)
+          .optional(),
+        emergencyContactNo: z
+          .string()
+          .min(1, { message: "Emergency Contact No is required" })
+          .transform(trimString)
+          .optional(),
+        bloodGroup: z
+          .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
+            message: "Blood Group is required",
+          })
+          .optional(),
+        presentAddress: z
+          .string()
+          .min(1, { message: "Present Address is required" })
+          .transform(trimString)
+          .optional(),
+        permanentAddress: z
+          .string()
+          .min(1, { message: "Permanent Address is required" })
+          .transform(trimString)
+          .optional(),
+        guardian: guardianSchema.optional(),
+        localGuardian: localGuardianSchema.optional(),
+        profileImg: z.string().optional(),
+        academicDepartment: z.string().optional(),
+        admissionSemester: z.string().optional(),
+      })
+      .optional(),
+  }),
+});
+
 export const studentValidations = {
-  studentValidationSchema: createStudentValidationSchema,
+  createStudentValidationSchema,
+  updateStudentValidationSchema,
 };
