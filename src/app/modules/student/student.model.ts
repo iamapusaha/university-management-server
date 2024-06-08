@@ -178,15 +178,22 @@ studentSchema.pre("findOne", function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
+
 studentSchema.pre("findOneAndUpdate", async function (next) {
-  const query = this.getQuery();
-  const isExistingStudent = await Student.findOne(query);
-  if (!isExistingStudent) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Not found any Student bt the id!"
-    );
+  try {
+    const query = this.getQuery();
+    const isExistingStudent = await Student.findOne(query);
+
+    if (!isExistingStudent) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        "Not found any Student by the id!"
+      );
+    }
+
     next();
+  } catch (error: any) {
+    next(error);
   }
 });
 studentSchema.pre("aggregate", function (next) {
