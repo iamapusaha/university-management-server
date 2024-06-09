@@ -1,8 +1,8 @@
 import { ZodError, ZodIssue } from "zod";
-import { TErrorSource } from "../interface/error.interface";
+import { TErrorSources } from "../interface/error.interface";
 
 const handleZodError = (err: ZodError) => {
-  const errorSources: TErrorSource = err.issues.map((issue: ZodIssue) => {
+  const errorSources: TErrorSources = err.issues.map((issue: ZodIssue) => {
     return {
       path: issue?.path[issue.path.length - 1],
       message: issue?.message,
