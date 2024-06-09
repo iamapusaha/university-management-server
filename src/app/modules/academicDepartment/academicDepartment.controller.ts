@@ -9,7 +9,9 @@ const createAcademicDepartment: RequestHandler = catchAsync(
   async (req, res, next) => {
     const departmentData = req.body;
     const result =
-      await academicDepartmentServices.createAcademicDepartment(departmentData);
+      await academicDepartmentServices.createAcademicDepartmentIntoDB(
+        departmentData
+      );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -21,7 +23,8 @@ const createAcademicDepartment: RequestHandler = catchAsync(
 
 const getAcademicDepartment: RequestHandler = catchAsync(
   async (req, res, next) => {
-    const result = await academicDepartmentServices.getAcademicDepartment();
+    const result =
+      await academicDepartmentServices.getAcademicDepartmentFromDB();
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -35,7 +38,7 @@ const getSingleAcademicDepartment: RequestHandler = catchAsync(
   async (req, res, next) => {
     const { departmentId } = req.params;
     const result =
-      await academicDepartmentServices.getSingleAcademicDepartment(
+      await academicDepartmentServices.getSingleAcademicDepartmentFromDB(
         departmentId
       );
     sendResponse(res, {
@@ -50,10 +53,11 @@ const getSingleAcademicDepartment: RequestHandler = catchAsync(
 const updateAcademicDepartment: RequestHandler = catchAsync(
   async (req, res, next) => {
     const { departmentId } = req.params;
-    const result = await academicDepartmentServices.updateAcademicDepartment(
-      departmentId,
-      req.body
-    );
+    const result =
+      await academicDepartmentServices.updateAcademicDepartmentFromDB(
+        departmentId,
+        req.body
+      );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

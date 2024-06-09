@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { TAcademicDepartment } from "./academicDepartment.interface";
 import { AcademicDepartment } from "./academicDepartment.model";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
   const result = await AcademicDepartment.create(payload);
@@ -20,21 +22,18 @@ const updateAcademicDepartmentFromDB = async (
   id: string,
   payload: Partial<TAcademicDepartment>
 ) => {
-  const result = await AcademicDepartment.findByIdAndUpdate(
-    {
-      _id: id,
-    },
+  const result = await AcademicDepartment.findOneAndUpdate(
+    { _id: id },
     payload,
-    {
-      new: true,
-    }
+    { new: true }
   );
+
   return result;
 };
 
 export const academicDepartmentServices = {
-  createAcademicDepartment: createAcademicDepartmentIntoDB,
-  getAcademicDepartment: getAcademicDepartmentFromDB,
-  getSingleAcademicDepartment: getSingleAcademicDepartmentFromDB,
-  updateAcademicDepartment: updateAcademicDepartmentFromDB,
+  createAcademicDepartmentIntoDB,
+  getAcademicDepartmentFromDB,
+  getSingleAcademicDepartmentFromDB,
+  updateAcademicDepartmentFromDB,
 };
