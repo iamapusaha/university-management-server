@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import { ZodError, ZodIssue } from "zod";
 import { TErrorSource } from "../interface/error.interface";
 import config from "../config";
+import handleZodError from "../errors/handleZodError";
 const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
   //setting default value
   let statusCode = err.statusCode || 500;
@@ -14,20 +15,6 @@ const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
-  const handleZodError = (err: ZodError) => {
-    const errorSources: TErrorSource = err.issues.map((issue: ZodIssue) => {
-      return {
-        path: issue?.path[issue.path.length - 1],
-        message: issue?.message,
-      };
-    });
-    const statusCode = 400;
-    return {
-      statusCode,
-      message: "validation error!",
-      errorSources,
-    };
-  };
   if (err instanceof ZodError) {
     const simfiledError = handleZodError(err);
     message = simfiledError?.message;
@@ -38,6 +25,7 @@ const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message,
     errorSources,
+    err,
     stack: config.NODE_ENV === "development" ? err?.stack : null,
   });
 };
