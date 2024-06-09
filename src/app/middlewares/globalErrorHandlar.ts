@@ -27,10 +27,12 @@ const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simfiledError?.statusCode;
     errorSources = simfiledError?.errorSources;
   }
+
   return res.status(statusCode).json({
     success: false,
     message,
     errorSources,
+    err,
     stack: config.NODE_ENV === "development" ? err?.stack : null,
   });
 };
