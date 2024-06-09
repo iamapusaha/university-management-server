@@ -2,6 +2,7 @@ import { ErrorRequestHandler } from "express";
 import httpStatus from "http-status";
 import { ZodError, ZodIssue } from "zod";
 import { TErrorSource } from "../interface/error.interface";
+import config from "../config";
 const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
   //setting default value
   let statusCode = err.statusCode || 500;
@@ -37,6 +38,7 @@ const globalErrorHandlar: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message,
     errorSources,
+    stack: config.NODE_ENV === "development" ? err?.stack : null,
   });
 };
 
