@@ -1,4 +1,4 @@
-import mongoose, { startSession } from "mongoose";
+import mongoose from "mongoose";
 import Student from "./student.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
@@ -10,7 +10,6 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   const queryObj = { ...query };
 
-  console.log("base query", query);
   const studentSearchAbleFields = ["email", "name.firstName", "presentAddress"];
   let searchTerm = "";
   if (query?.searchTerm) {
@@ -23,7 +22,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   });
 
   //Filtering
-  const excluderFields = ["searchTerm", "sort"];
+  const excluderFields = ["searchTerm", "sort", "limite"];
   excluderFields.forEach((el) => delete queryObj[el]);
 
   const filterQuery = searchFindQuery
@@ -41,9 +40,17 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     sort = query.sort as string;
   }
 
-  const sortQuery = await filterQuery.sort(sort);
+  const sortQuery = filterQuery.sort(sort);
 
-  return sortQuery;
+  let limite = 1;
+
+  if (query.limite) {
+    limite = query.limite as number;
+  }
+
+  const limiteQuery = await sortQuery.limit(limite);
+
+  return limiteQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
