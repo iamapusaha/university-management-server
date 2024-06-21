@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import Student from "./student.model";
 import AppError from "../../errors/AppError";
@@ -9,7 +10,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   // {email: {$regex: query.searchTerm ,$options: "i"}}
 
   const queryObj = { ...query };
-
+  console.log("base query:", query);
   const studentSearchAbleFields = ["email", "name.firstName", "presentAddress"];
   let searchTerm = "";
   if (query?.searchTerm) {
@@ -22,7 +23,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   });
 
   //Filtering
-  const excluderFields = ["searchTerm", "sort", "limite"];
+  const excluderFields = ["searchTerm", "sort", "limite", "page"];
   excluderFields.forEach((el) => delete queryObj[el]);
 
   const filterQuery = searchFindQuery
@@ -42,13 +43,21 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   const sortQuery = filterQuery.sort(sort);
 
+  let page = 1;
   let limite = 1;
+  let skip = 0;
 
   if (query.limite) {
-    limite = query.limite as number;
+    limite = Number(query.limite);
   }
 
-  const limiteQuery = await sortQuery.limit(limite);
+  if (query.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limite;
+  }
+
+  const paginateQuery = sortQuery.skip(skip);
+  const limiteQuery = await paginateQuery.limit(limite);
 
   return limiteQuery;
 };
